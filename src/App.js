@@ -1,52 +1,45 @@
-import {Box, Button, AppBar, Typography, Toolbar, Stack} from '@mui/material'
-import { Email, Settings} from '@mui/icons-material';
-import DropDown from './components/DropDown';
+import {CssBaseline, createTheme, ThemeProvider} from '@mui/material'
+import Header from './components/Header/Header';
+import Main from './components/Main/Main';
+import Footer from './components/Footer/Footer';
+
+import { useState } from 'react';
+import DarkModeContext from './components/DarkModeContext/DarkModeContext';
+
+
+
+let getTheme = (mode) => 
+createTheme({
+  palette: {
+    mode: mode,
+    primary: {
+      main: '#0052cc',
+    },
+    secondary: {
+      main: '#edf2ff',
+    },
+  },
+  shape: {
+    borderRadius: 10,
+  }
+});
 
 
 
 function App() {
+  const [mode, setMode] = useState('light');
 
   return (
     <>
-      <AppBar position="static">
-        <Toolbar sx={{display: 'flex', justifyContent: 'space-between', backgroundColor: '#4dd0e1'}}>
-           <Button variant='text' sx={{color: 'white'}}>
-            Navbar
-           </Button>
-
-           <Box sx={{display: 'flex', alignItems: 'center'}}>
-              <Button startIcon={<Email/>} sx={{color: 'white'}}>
-                Contact
-              </Button>
-              <Button startIcon={<Settings/>} sx={{color: 'white'}}>
-                Settings
-              </Button>
-              <DropDown/>
-           </Box>
-        </Toolbar>
-      </AppBar>
-
-      
-
-      <Box sx={{ flexGrow: 1 }} marginTop={20}>
-      <AppBar position="static">
-         <Toolbar  sx={{display: 'flex', justifyContent: 'space-between'}} >
-          
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Femmecubator
-          </Typography>
-
-          <Box>
-             <Stack spacing={5} direction="row">
-                 <Button color="inherit">Listings</Button>
-                 <Button color="inherit">Mentors</Button>
-                 <Button color="inherit">My Account</Button>
-                 <Button color="inherit">Log out</Button>
-             </Stack>
-          </Box>
-        </Toolbar>
-      </AppBar>
-    </Box>
+    <DarkModeContext.Provider value={{mode, toggleMode: ()=> setMode(mode === 'light'? 'dark': 'light')}}>
+    <ThemeProvider theme={getTheme(mode)}>
+      <CssBaseline/>
+      <Header/>
+      <Main/>
+      <Footer/>
+    </ThemeProvider>
+    </DarkModeContext.Provider>
+    
     </>
   );
 }
